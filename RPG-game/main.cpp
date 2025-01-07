@@ -1,22 +1,25 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "DEFS.h"
 #include <vector>
 #include <cmath>
+#include "Entinties/Player.h"
 void closingWindow(sf::RenderWindow&);
 
 
-void NormalizeVetor(sf::Vector2f&);
+
+
+
+
+
 
 int main()
 {
-
+    
     //! ######################### Create objects ############################
-    sf::Texture playerTexture;
     sf::Texture monsterTexture;
     sf::Texture fireBallTexture;
     try {
-        if (!playerTexture.loadFromFile(".\\Assets\\Textures\\Player\\Fumiko.png"))
-            throw "Erorr Loading PLayer Texture";
         if (!monsterTexture.loadFromFile(".\\Assets\\Textures\\Monster\\Monster.png"))
             throw "Erorr Loading PLayer Texture";
         if(!fireBallTexture.loadFromFile(".\\Assets\\Textures\\Weabons\\fireball.png"))
@@ -26,10 +29,8 @@ int main()
         std::cout << err;
         return 0;
     }
-
-    sf::Sprite playerSpirit(playerTexture);
-    playerSpirit.setTextureRect(sf::IntRect(sf::Vector2i(2 * 24, 2 * 32), sf::Vector2i(24, 32)));
-    playerSpirit.setScale(sf::Vector2f(3, 3));
+   
+    
 
 
     sf::Sprite monsterSpirit(monsterTexture);
@@ -38,58 +39,59 @@ int main()
     monsterSpirit.setPosition(sf::Vector2f(1000, 700));
 
     std::vector<sf::Sprite> fireballs;
-
+    
 
     sf::RenderWindow window(sf::VideoMode({ 1240, 800 }), "RPG-Game!");
-    
+    Player player("..\\Assets\\Textures\\Player\\Fumiko.png", { 3,4 }, &window, 1);
+
+
+    window.setFramerateLimit(60);
+    short motionState = 0;
     while (window.isOpen())
     {
 
+        //while (const std::optional event = window.pollEvent())
+        //{
+        //    std::cout << "is mouse and keybard now aren't event>?";
+        //    if (const auto mouse = event->getIf<sf::Event::MouseButtonPressed>())
+        //    {
+        //       
+        //        if (sf::Mouse::Button::Left == mouse->button)
+        //        {
+        //            std::cout << "yes Lef tMpuse pressed";
+        //            sf::Sprite fireball(fireBallTexture,
+        //                sf::IntRect(sf::Vector2i(0, 64 * 4), sf::Vector2i(64, 64)));
+        //            fireball.setPosition(playerSpirit.getPosition());
+        //            fireballs.push_back(fireball);
+        //        }
+        //        
+        //    }
+        //  
 
-        while (const std::optional event = window.pollEvent())
-        {
-            std::cout << "is mouse and keybard now aren't event>?";
-            if (const auto mouse = event->getIf<sf::Event::MouseButtonPressed>())
-            {
-                std::cout << "yes Mpuse pressed";
-                if (sf::Mouse::Button::Left == mouse->button)
-                {
-                    std::cout << "yes Lef tMpuse pressed";
-                    sf::Sprite fireball(fireBallTexture,
-                        sf::IntRect(sf::Vector2i(0, 64 * 4), sf::Vector2i(64, 64)));
-                    fireball.setPosition(playerSpirit.getPosition());
-                    fireballs.push_back(fireball);
-                }
-            }
-            else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
-            {
-                if (keyPressed->scancode == sf::Keyboard::Scancode::X)
-                    std::cout << "X pressed";
-            }
+        //            
 
-       // closingWindow(window);
-        }
-        
+        //    // closingWindow(window);
+        //}
 
         for (auto& fireball : fireballs) {
+            sf::FloatRect boundingBox = fireball.getGlobalBounds();
+            if (boundingBox.findIntersection(monsterSpirit.getGlobalBounds())) {
+                fireballs.erase(fireballs.begin());
+            }
             sf::Vector2f bulletDir = (monsterSpirit.getPosition() - fireball.getPosition());
             NormalizeVetor(bulletDir);
-            fireball.setPosition(fireball.getPosition() + bulletDir);
+            
         }
+        // ++++++++++++++++++++++++++++++ PLayer Movements +++++++++++++++++++++++++++++++  //
+        
+        
+        player.Update();
 
-        sf::Vector2f Playerpostion = playerSpirit.getPosition();
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-            playerSpirit.setPosition(Playerpostion - sf::Vector2f(.1f, 0));
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-            playerSpirit.setPosition(Playerpostion + sf::Vector2f(.1f, 0.0f));
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
-            playerSpirit.setPosition(Playerpostion + sf::Vector2f(0.0f, .1f));
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
-            playerSpirit.setPosition(Playerpostion - sf::Vector2f(0.0f, .1f));
-
+        //! Checks if out of the screen
+        
 
         window.clear(sf::Color::Cyan);
-        window.draw(playerSpirit);
+        player.Draw();
         for (auto &fireball : fireballs)
             window.draw(fireball);
         window.draw(monsterSpirit);
@@ -113,9 +115,4 @@ void closingWindow(sf::RenderWindow& window)
     window.handleEvents(onClose, onKeyPressed);
 }
 
-void NormalizeVetor(sf::Vector2f& vec)
-{
-    float Mag = sqrt(vec.x * vec.x + vec.y * vec.y);
-    vec.x /= Mag;
-    vec.y /= Mag;
-}
+

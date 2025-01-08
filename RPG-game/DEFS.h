@@ -37,19 +37,11 @@ enum MostionState {
 enum ProjectileDirection{
     LEFT,
     LEFT_UP,
-    UP,
-    RIGHT_UP,
+    LEFT_DOWN,
     RIGHT,
+    RIGHT_UP,
     RIGHT_DOWN,
     DOWN,
-    LEFT_DOWN
+    UP
 };
 
-
-
-void NormalizeVetor(sf::Vector2f& vec)
-{
-    float Mag = sqrt(vec.x * vec.x + vec.y * vec.y);
-    vec.x /= Mag;
-    vec.y /= Mag;
-}

@@ -1,9 +1,9 @@
 #include "Player.h"
+#include <iostream>
 
 
-
-Player::Player(std::string texturePath, NumberOfXYParts&& spriteNumbers, sf::RenderWindow* window, short speed)
-    :Entity(texturePath, spriteNumbers, window, speed), motionState(0)
+Player::Player(std::string texturePath, NumberOfXYParts&& spriteNumbers, sf::RenderWindow* window, sf::Clock* Pclck, float speed)
+    :Entity(texturePath, spriteNumbers, window, speed, Pclck), motionState(0)
 {
     entitySpirit->setTextureRect(sf::IntRect(sf::Vector2i((motionState + WALKING) * WIDTH, lookingDirection * HEIGHT), sf::Vector2i(WIDTH, HEIGHT)));
 
@@ -11,27 +11,39 @@ Player::Player(std::string texturePath, NumberOfXYParts&& spriteNumbers, sf::Ren
 
 void Player::Update()
 {
+    sf::Time deltaTime = Pclck->restart();
+    int newSpeed;
+    framCounter +=newSpeed = deltaTime.asMilliseconds() * speed;
+    bool isMoving = false;
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-        entitySpirit->move(sf::Vector2f(-10 * speed, 0));
+        entitySpirit->move(sf::Vector2f(-1 * newSpeed, 0));
         lookingDirection = LEFT_NO_GUN;
-        motionState = (motionState + 1) % 3;
+        isMoving = true;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-        entitySpirit->move(sf::Vector2f(10 * speed, 0.0f));
+        entitySpirit->move(sf::Vector2f(1 * newSpeed, 0.0f));
         lookingDirection = RIGHT_NO_GUN;
-        motionState = (motionState + 1) % 3;
+        isMoving = true;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-        entitySpirit->move(sf::Vector2f(0.0f, 10 * speed));
+        entitySpirit->move(sf::Vector2f(0.0f, 1 * newSpeed));
         lookingDirection = DOWN_NO_GUN;
-        motionState = (motionState + 1) % 3;
+        isMoving = true;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-        entitySpirit->move(sf::Vector2f(0.0f, -10 * speed));
+        entitySpirit->move(sf::Vector2f(0.0f, -1 * newSpeed));
         lookingDirection = UP_NO_GUN;
-        motionState = (motionState + 1) % 3;
+        isMoving = true;
     }
-    entitySpirit->setTextureRect(sf::IntRect(sf::Vector2i((motionState + WALKING) * WIDTH, lookingDirection * HEIGHT), sf::Vector2i(WIDTH, HEIGHT)));
+    if (isMoving) {
+        entitySpirit->setTextureRect(sf::IntRect(sf::Vector2i((motionState + WALKING) * WIDTH, lookingDirection * HEIGHT), sf::Vector2i(WIDTH, HEIGHT)));
+        std::cout << framCounter << "  ;  " << swithcFrame;
+        if (framCounter >= swithcFrame) {
+            motionState = (++motionState) % 3;
+            framCounter = 0;
+        }
+    }
 }
 
 void Player::constraints()

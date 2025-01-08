@@ -8,7 +8,9 @@ private:
 
 public:
 
-	FireBall(std::string texturePath, NumberOfXYParts&& spriteNumbers, sf::RenderWindow* window, short speed = 0);
+	FireBall(sf::Vector2f playerPostion, std::string texturePath, NumberOfXYParts&& spriteNumbers, sf::RenderWindow* window, short speed = 0);
+	FireBall(FireBall& fireball2);
+	FireBall(FireBall&& fireball2);
 
 	virtual void Update(const sf::Vector2f& Target);
 	virtual void constraints();

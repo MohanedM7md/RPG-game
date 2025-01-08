@@ -135,11 +135,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Abilities\Ability.cpp" />
+    <ClCompile Include="Abilities\FireBall.cpp" />
     <ClCompile Include="Entinties\Entity.cpp" />
     <ClCompile Include="Entinties\Player.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Abilities\Ability.h" />
+    <ClInclude Include="Abilities\FireBall.h" />
     <ClInclude Include="DEFS.h" />
     <ClInclude Include="Entinties\Entity.h" />
     <ClInclude Include="Entinties\Player.h" />

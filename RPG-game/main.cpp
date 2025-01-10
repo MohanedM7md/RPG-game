@@ -31,7 +31,8 @@ int main()
     }
    
     
-
+    size_t fireRate = 1000; //set fire rate 1 bullet/sec
+    size_t TimeCalulator = 0;
 
     sf::Sprite monsterSpirit(monsterTexture);
     monsterSpirit.setTextureRect(sf::IntRect(sf::Vector2i(0 * 24, 4 * 32), sf::Vector2i(24, 32)));
@@ -51,26 +52,29 @@ int main()
     while (window.isOpen())
     {
 
-        
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-            fireballs.push_back(new FireBall(player.GetPostion(), "..\\Assets\\extures\\Weabons\\fireball.png", {3,4}, &window, 1));
+        TimeCalulator += myclock->getElapsedTime().asMilliseconds();
+        std::cout << "TimeCalulator = " << TimeCalulator<<'\n';
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && TimeCalulator > fireRate) {
+
+            fireballs.push_back(new FireBall(player.GetPostion(), "..\\Assets\\extures\\Weabons\\fireball.png", {3,4}, &window, 100));
+            TimeCalulator = 0;
+        }
 
         for (auto& fireball : fireballs)
             fireball->Update(monsterSpirit.getPosition());   
         
-     
         player.Update();
         window.clear(sf::Color::Cyan);
         player.Draw();
-        for (auto& fireball : fireballs) {
-            fireball->Draw();
-        }
+        for (int i = 0; i < fireballs.size(); i++)
+            fireballs.at(i)->Draw();
         window.draw(monsterSpirit);
         window.display();
     }
     for (int i = 0; i < fireballs.size(); i++) {
         delete fireballs.at(0);
     }
+    delete myclock;
 }
 
 void closingWindow(sf::RenderWindow& window)

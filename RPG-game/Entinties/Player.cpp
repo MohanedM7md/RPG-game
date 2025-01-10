@@ -5,17 +5,24 @@
 Player::Player(std::string texturePath, NumberOfXYParts&& spriteNumbers, sf::RenderWindow* window, sf::Clock* Pclck, float speed)
     :Entity(texturePath, spriteNumbers, window, speed, Pclck), motionState(0)
 {
-    entitySpirit->setTextureRect(sf::IntRect(sf::Vector2i((motionState + WALKING) * WIDTH, lookingDirection * HEIGHT), sf::Vector2i(WIDTH, HEIGHT)));
+    entitySpirit->setTextureRect(sf::IntRect(sf::Vector2i((motionState + Mt) * WIDTH, lookingDirection * HEIGHT), sf::Vector2i(WIDTH, HEIGHT)));
 
 }
 
 void Player::Update()
 {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
+        Mt = RUNING;
+        this->speed = .8;
+    }
+    else {
+        Mt = WALKING;
+        this->speed = 0.5;
+    }
     sf::Time deltaTime = Pclck->restart();
     int newSpeed;
     framCounter +=newSpeed = deltaTime.asMilliseconds() * speed;
     bool isMoving = false;
-
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
         entitySpirit->move(sf::Vector2f(-1 * newSpeed, 0));
         lookingDirection = LEFT_NO_GUN;
@@ -37,8 +44,8 @@ void Player::Update()
         isMoving = true;
     }
     if (isMoving) {
-        entitySpirit->setTextureRect(sf::IntRect(sf::Vector2i((motionState + WALKING) * WIDTH, lookingDirection * HEIGHT), sf::Vector2i(WIDTH, HEIGHT)));
-        std::cout << framCounter << "  ;  " << swithcFrame;
+        entitySpirit->setTextureRect(sf::IntRect(sf::Vector2i((motionState + Mt) * WIDTH, lookingDirection * HEIGHT), sf::Vector2i(WIDTH, HEIGHT)));
+        //std::cout << framCounter << "  ;  " << swithcFrame;
         if (framCounter >= swithcFrame) {
             motionState = (++motionState) % 3;
             framCounter = 0;

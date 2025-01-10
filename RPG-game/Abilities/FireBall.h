@@ -8,7 +8,7 @@ private:
 
 public:
 
-	FireBall(sf::Vector2f playerPostion, std::string texturePath, NumberOfXYParts&& spriteNumbers, sf::RenderWindow* window, short speed = 0);
+	FireBall(sf::Vector2f playerPostion, std::string texturePath, NumberOfXYParts&& spriteNumbers, sf::RenderWindow* window, size_t FireRat, short speed = 0);
 	FireBall(FireBall& fireball2);
 	FireBall(FireBall&& fireball2);
 

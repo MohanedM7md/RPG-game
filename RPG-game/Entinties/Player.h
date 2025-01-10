@@ -7,6 +7,7 @@ class Player : public Entity {
 
 private:
 	short motionState;
+	bool isRuning;
 
 public:
 	Player(std::string texturePath, NumberOfXYParts&& spriteNumbers, sf::RenderWindow* window, sf::Clock* Pclck, float speed = 0);

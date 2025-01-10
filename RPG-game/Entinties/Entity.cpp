@@ -1,7 +1,7 @@
 #include "Entity.h"
 
 Entity::Entity(std::string texturePath, NumberOfXYParts& spriteNumbers,sf::RenderWindow* window, float speed, sf::Clock* Pclck)
-	:window(window), spriteNumbers(spriteNumbers), lookingDirection(UP_NO_GUN),speed(speed), Pclck(Pclck)
+	:window(window), spriteNumbers(spriteNumbers), lookingDirection(UP_NO_GUN),speed(speed), Pclck(Pclck), Mt(WALKING)
 {
 		if (!entityTexture.loadFromFile(".\\Assets\\Textures\\Player\\Fumiko.png"))
 			throw "Couldn't Load Entity texture";

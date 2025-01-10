@@ -12,6 +12,7 @@ protected:
 	float speed;
 	sf::RenderWindow* window;
 	MotionDirection lookingDirection;
+	MostionState Mt;
 	sf::Clock* Pclck;
 	float swithcFrame, framCounter;
 public:
